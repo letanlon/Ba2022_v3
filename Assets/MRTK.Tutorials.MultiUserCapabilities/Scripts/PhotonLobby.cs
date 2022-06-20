@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
+using UnityEditor.XR;
 using UnityEngine;
 
 namespace MRTK.Tutorials.MultiUserCapabilities
@@ -11,8 +12,13 @@ namespace MRTK.Tutorials.MultiUserCapabilities
         private int roomNumber = 1;
         private int userIdCount;
 
+        public bool onHoloLens;
+
+
         private void Awake()
         {
+
+
             if (Lobby == null)
             {
                 Lobby = this;
@@ -29,6 +35,12 @@ namespace MRTK.Tutorials.MultiUserCapabilities
             DontDestroyOnLoad(gameObject);
 
             GenericNetworkManager.OnReadyToStartNetwork += StartNetwork;
+        }
+
+        void Start()
+{
+            onHoloLens = SystemInfo.deviceModel.Contains("HoloLens");
+            //roomUI.SetActive(!onHoloLens);
         }
 
         public override void OnConnectedToMaster()

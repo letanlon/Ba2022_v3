@@ -375,7 +375,7 @@ PrefabInstance:
     - target: {fileID: 2645002552411527826, guid: 14cae43a723f13c48b7eb9496c8a09ab, type: 3}
       propertyPath: photonUserPrefab
       value: 
-      objectReference: {fileID: 4890457134284591811, guid: 28c43c0f3e1e96440a5270a96861fbf6, type: 3}
+      objectReference: {fileID: 7422788577152138725, guid: d3148e93c88777c438bfdf55801d4377, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14cae43a723f13c48b7eb9496c8a09ab, type: 3}
 --- !u!1 &1031110935
@@ -521,6 +521,23 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
+--- !u!1 &1070438706 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2645002551747710847, guid: 14cae43a723f13c48b7eb9496c8a09ab, type: 3}
+  m_PrefabInstance: {fileID: 967918739}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1070438707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070438706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43d53eebd1ccfcc4ba5b5e8dd7bd202e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1751369383
 GameObject:
   m_ObjectHideFlags: 0
