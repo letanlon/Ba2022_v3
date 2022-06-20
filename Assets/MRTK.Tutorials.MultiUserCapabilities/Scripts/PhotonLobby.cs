@@ -18,7 +18,6 @@ namespace MRTK.Tutorials.MultiUserCapabilities
         private void Awake()
         {
 
-
             if (Lobby == null)
             {
                 Lobby = this;
@@ -37,11 +36,7 @@ namespace MRTK.Tutorials.MultiUserCapabilities
             GenericNetworkManager.OnReadyToStartNetwork += StartNetwork;
         }
 
-        void Start()
-{
-            onHoloLens = SystemInfo.deviceModel.Contains("HoloLens");
-            //roomUI.SetActive(!onHoloLens);
-        }
+
 
         public override void OnConnectedToMaster()
         {
