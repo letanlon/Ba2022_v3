@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PUN testscene 2.unity
     guid: c343941921d4b454cb7aecdd914dd4ec
+  - enabled: 0
+    path: Assets/Scenes/restapitesting.unity
+    guid: f41fdfd533655ba4e9edba2ecd30c7d7
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: d7fedfed58708e144a2d77c04c97a341, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 920abb052a2c1224685924a5a1d94f55, type: 2}
