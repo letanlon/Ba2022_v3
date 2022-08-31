@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 5745455093304224696}
   m_Layer: 0
   m_Name: QRCode
-  m_TagString: Untagged
+  m_TagString: QrCode
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -347,6 +347,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d513bae11739f3498ca4a03da6bb814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trackedPosition:
+    position: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1213812270178400
 GameObject:
   m_ObjectHideFlags: 0

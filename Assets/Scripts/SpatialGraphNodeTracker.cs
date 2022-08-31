@@ -14,6 +14,8 @@ namespace QRTracking
         private System.Guid _id;
         private SpatialGraphNode node;
 
+        [SerializeField] Pose trackedPosition = default;
+
         public System.Guid Id
         {
             get => _id;
@@ -50,6 +52,9 @@ namespace QRTracking
                         pose = pose.GetTransformedBy(CameraCache.Main.transform.parent);
                     }
 
+                    // Set ModelHolders transform
+                    trackedPosition=pose;
+
                     gameObject.transform.SetPositionAndRotation(pose.position, pose.rotation);
                     Debug.Log("Id= " + Id + " QRPose = " + pose.position.ToString("F7") + " QRRot = " + pose.rotation.ToString("F7"));
                 }
@@ -67,6 +72,11 @@ namespace QRTracking
                 node = (Id != System.Guid.Empty) ? SpatialGraphNode.FromStaticNodeId(Id) : null;
                 Debug.Log("Initialize SpatialGraphNode Id= " + Id);
             }
+        }
+
+        public Pose getPose()
+        {
+            return trackedPosition;
         }
     }
 }

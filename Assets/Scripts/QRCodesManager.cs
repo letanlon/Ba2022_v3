@@ -32,6 +32,8 @@ namespace QRTracking
     {
         [Tooltip("Determines if the QR codes scanner should be automatically started.")]
         public bool AutoStartQRTracking = true;
+        [SerializeField] GameObject ModelHolder = default;
+
 
         public bool IsTrackerRunning { get; private set; }
 
@@ -132,7 +134,15 @@ namespace QRTracking
                 IsTrackerRunning = false;
                 if (qrTracker != null)
                 {
+                    //set ModelHolder to tracked Position
+                    Pose pose = GameObject.FindGameObjectWithTag("QrCode").GetComponent<SpatialGraphNodeTracker>().getPose();
+                    ModelHolder.transform.position=pose.position;
+                    ModelHolder.transform.rotation=pose.rotation;
+
                     qrTracker.Stop();
+                    
+
+
                     qrCodesList.Clear();
                 }
 
