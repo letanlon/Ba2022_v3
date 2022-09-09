@@ -1,15 +1,17 @@
 using TriLibCore;
 using TriLibCore.General;
 using UnityEngine;
+using QRTracking;
+using SimpleJSON;
+
  
 public class ModelLoader : MonoBehaviour
 {
-
-    [SerializeField] GameObject modelHolder = default;
+    [SerializeField] GameObject modelCalibrator = default;
     // Lets the user load a new model by clicking a GUI button.
     void Start()
     {
-        loadModel();
+        
     }
     private void OnGUI()
     {
@@ -34,9 +36,10 @@ public class ModelLoader : MonoBehaviour
             AssetDownloader.LoadModelFromUri(webRequest, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions, null, "obj");
 
             */
+
             GameObject _gameObject;
             _gameObject = GameObject.Find("1");
-            _gameObject.transform.parent = modelHolder.transform;
+            _gameObject.transform.parent = modelCalibrator.transform;
         }
         
     }
@@ -79,6 +82,11 @@ public class ModelLoader : MonoBehaviour
 
     private void loadModel()//string modelname)
     {
+                                            // request scanned model
+            string qrCodeText = GameObject.FindGameObjectWithTag("QrCode").GetComponent<QRCode>().CodeText;
+            ServerCommunicator serverCommunicator =  GameObject.FindGameObjectWithTag("ServerCommunicator").GetComponent<ServerCommunicator>();
+            serverCommunicator.makeGetRequest("/objectModels/", qrCodeText);
+
             // Creates an AssetLoaderOptions instance.
             // AssetLoaderOptions is a class used to configure many aspects of the loading process.
             // We won't change the default settings this time, so we can use the instance as it is.
@@ -87,12 +95,22 @@ public class ModelLoader : MonoBehaviour
             // Creates the web-request.
             // The web-request contains information on how to download the model.
             // Let's download a model from the TriLib website.
-            var webRequest = AssetDownloader.CreateWebRequest("http://192.168.1.201:3000/objectModels/file/nordservoold");
+            var webRequest = AssetDownloader.CreateWebRequest("http://192.168.1.201:3000/objectModels/file/"+qrCodeText);
  
             // Important: If you're downloading models from files that are not Zipped, you must pass the model extension as the last parameter from this call (Eg: "fbx")
             // Begins the model downloading.
             AssetDownloader.LoadModelFromUri(webRequest, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions, null, "obj");
+            attachModelasChild();
+    }
 
+    private void attachModelasChild()
+    {
+        GameObject _gameObject;
+        _gameObject = GameObject.Find("1");
+        _gameObject.transform.parent = modelCalibrator.transform;
+    }
 
-        }
+    private void useSavedPosition(){
+        
+    }
 }

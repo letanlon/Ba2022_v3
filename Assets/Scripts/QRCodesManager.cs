@@ -27,11 +27,13 @@ namespace QRTracking
             Data = data;
         }
     }
-
+    
     public class QRCodesManager : Singleton<QRCodesManager>
     {
         [Tooltip("Determines if the QR codes scanner should be automatically started.")]
         public bool AutoStartQRTracking = true;
+        [SerializeField] GameObject serverCommunicator=default;
+
         [SerializeField] GameObject ModelHolder = default;
 
 
@@ -108,7 +110,6 @@ namespace QRTracking
                 StartQRTracking();
             }
         }
-
         public void StartQRTracking()
         {
             if (qrTracker != null && !IsTrackerRunning)
@@ -138,10 +139,12 @@ namespace QRTracking
                     Pose pose = GameObject.FindGameObjectWithTag("QrCode").GetComponent<SpatialGraphNodeTracker>().getPose();
                     ModelHolder.transform.position=pose.position;
                     ModelHolder.transform.rotation=pose.rotation;
-
-                    qrTracker.Stop();
                     
+                    
+                    
+                    // instantiating at savedPosition
 
+                    qrTracker.Stop();            
 
                     qrCodesList.Clear();
                 }
@@ -234,6 +237,7 @@ namespace QRTracking
                 }
             }
         }
+
     }
 
 }
