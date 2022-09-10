@@ -32,9 +32,7 @@ namespace QRTracking
     {
         [Tooltip("Determines if the QR codes scanner should be automatically started.")]
         public bool AutoStartQRTracking = true;
-        [SerializeField] GameObject serverCommunicator=default;
 
-        [SerializeField] GameObject ModelHolder = default;
 
 
         public bool IsTrackerRunning { get; private set; }
@@ -46,8 +44,7 @@ namespace QRTracking
         public event EventHandler<QRCodeEventArgs<Microsoft.MixedReality.QR.QRCode>> QRCodeUpdated;
         public event EventHandler<QRCodeEventArgs<Microsoft.MixedReality.QR.QRCode>> QRCodeRemoved;
 
-        private System.Collections.Generic.SortedDictionary<System.Guid, Microsoft.MixedReality.QR.QRCode> qrCodesList = new SortedDictionary<System.Guid, Microsoft.MixedReality.QR.QRCode>();
-
+        [SerializeField] System.Collections.Generic.SortedDictionary<System.Guid, Microsoft.MixedReality.QR.QRCode> qrCodesList = new SortedDictionary<System.Guid, Microsoft.MixedReality.QR.QRCode>();
         private QRCodeWatcher qrTracker;
         private bool capabilityInitialized = false;
         private QRCodeWatcherAccessStatus accessStatus;
@@ -135,18 +132,11 @@ namespace QRTracking
                 IsTrackerRunning = false;
                 if (qrTracker != null)
                 {
-                    //set ModelHolder to tracked Position
-                    Pose pose = GameObject.FindGameObjectWithTag("QrCode").GetComponent<SpatialGraphNodeTracker>().getPose();
-                    ModelHolder.transform.position=pose.position;
-                    ModelHolder.transform.rotation=pose.rotation;
-                    
-                    
-                    
-                    // instantiating at savedPosition
 
                     qrTracker.Stop();            
 
                     qrCodesList.Clear();
+
                 }
 
                 var handlers = QRCodesTrackingStateChanged;
@@ -156,6 +146,7 @@ namespace QRTracking
                 }
             }
         }
+
 
         private void QRCodeWatcher_Removed(object sender, QRCodeRemovedEventArgs args)
         {

@@ -13,6 +13,8 @@ public class ServerCommunicator : MonoBehaviour
     JSONNode objectModelNode;
     JSONNode ticketNode;
     [SerializeField] GameObject modelCalibrator = default;
+    [SerializeField] GameObject ModelHolder = default;
+
 
 
     [SerializeField] string[] url;
@@ -186,10 +188,31 @@ public class ServerCommunicator : MonoBehaviour
 
     public void attachModelasChild()
     {
+
+
+    }
+
+    public void setModelHolderToTrackedPosition(){
+        // ModelHolder.transform.position=pose.position;
+        // ModelHolder.transform.rotation=pose.rotation;
+        //Move ModelHolder to tracked position
+        //Pose pose = GameObject.FindGameObjectWithTag("QrCode").GetComponent<SpatialGraphNodeTracker>().getPose();
+
+        //AttachModelAsChild of Calibrator
         GameObject _gameObject;
         _gameObject = GameObject.Find("1");
         _gameObject.transform.parent = modelCalibrator.transform;
-        modelCalibrator.GetComponent<ModelCalibrator>().setToSavedPosition(objectModelNode["position"][0], objectModelNode["position"][1], objectModelNode["position"][2], objectModelNode["position"][3], objectModelNode["position"][4],objectModelNode["position"][5],objectModelNode["position"][6], objectModelNode["position"][7],objectModelNode["position"][8]);
 
-    }
+        //set ModelHolder to QR Position
+        Transform qrTransform = GameObject.FindGameObjectWithTag("QrCode").transform;
+
+        Debug.Log("setModelHolderTo position: "+qrTransform.position.x+" "+qrTransform.position.y+" position: "+qrTransform.position);
+        Debug.Log("setModelHolderTo rotation: "+qrTransform.rotation.x+" "+qrTransform.rotation.y);
+
+        ModelHolder.transform.position=qrTransform.position;
+        ModelHolder.transform.rotation=qrTransform.rotation;
+
+        //set modelCalibrator to last saved position
+        modelCalibrator.GetComponent<ModelCalibrator>().setToSavedPosition(objectModelNode["position"][0], objectModelNode["position"][1], objectModelNode["position"][2], objectModelNode["position"][3], objectModelNode["position"][4],objectModelNode["position"][5],objectModelNode["position"][6], objectModelNode["position"][7],objectModelNode["position"][8]);
+}
 }
