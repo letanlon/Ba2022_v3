@@ -6,17 +6,17 @@ using SimpleJSON;
 using TMPro;
 
  
-public class ModelLoader : MonoBehaviour
+public class ModelLoaderTest : MonoBehaviour
 {
     [SerializeField] GameObject modelCalibrator = default;
     [SerializeField] TextMeshPro dialogText = default;
     [SerializeField] TextMeshPro errorText = default;
+
     // Lets the user load a new model by clicking a GUI button.
     void Start()
     {
-        
+        loadModel();
     }
-    
  
     // This event is called when the model loading progress changes.
     // You can use this event to update a loading progress-bar, for instance.
@@ -24,7 +24,10 @@ public class ModelLoader : MonoBehaviour
     // Platforms like UWP and WebGL don't call this method at this moment, since they don't use threads.
     private void OnProgress(AssetLoaderContext assetLoaderContext, float progress)
     {
-        Debug.Log("Progress: "+progress);
+        string progressStatus = "Progress: "+progress;
+        Debug.Log(progressStatus);
+        dialogText.text= progressStatus;
+
     }
  
     // This event is called when there is any critical error loading your model.
@@ -33,7 +36,8 @@ public class ModelLoader : MonoBehaviour
     {
         string errorStatus = "error: "+contextualizedError;
         Debug.Log(errorStatus);
-        dialogText.text= errorStatus;    }
+        dialogText.text= errorStatus;
+    }
  
     // This event is called when all model GameObjects and Meshes have been loaded.
     // There may still Materials and Textures processing at this stage.
@@ -57,10 +61,6 @@ public class ModelLoader : MonoBehaviour
 
     private void loadModel()//string modelname)
     {
-                                            // request scanned model
-            string qrCodeText = GameObject.FindGameObjectWithTag("QrCode").GetComponent<QRCode>().CodeText;
-            ServerCommunicator serverCommunicator =  GameObject.FindGameObjectWithTag("ServerCommunicator").GetComponent<ServerCommunicator>();
-            serverCommunicator.makeGetRequest("/objectModels/", qrCodeText);
 
             // Creates an AssetLoaderOptions instance.
             // AssetLoaderOptions is a class used to configure many aspects of the loading process.
@@ -70,22 +70,12 @@ public class ModelLoader : MonoBehaviour
             // Creates the web-request.
             // The web-request contains information on how to download the model.
             // Let's download a model from the TriLib website.
-            var webRequest = AssetDownloader.CreateWebRequest("http://192.168.1.201:3000/objectModels/file/"+qrCodeText);
+            var webRequest = AssetDownloader.CreateWebRequest("http://192.168.1.201:3000/objectModels/file/"+"nordservoold");
  
             // Important: If you're downloading models from files that are not Zipped, you must pass the model extension as the last parameter from this call (Eg: "fbx")
             // Begins the model downloading.
             AssetDownloader.LoadModelFromUri(webRequest, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions, null, "obj");
-            //attachModelasChild();
     }
 
-    private void attachModelasChild()
-    {
-        GameObject _gameObject;
-        _gameObject = GameObject.Find("1");
-        _gameObject.transform.parent = modelCalibrator.transform;
-    }
 
-    private void useSavedPosition(){
-        
-    }
 }

@@ -8,6 +8,7 @@ TagManager:
   - ModelHolder
   - QrCode
   - ServerCommunicator
+  - DialogText
   layers:
   - Default
   - TransparentFX

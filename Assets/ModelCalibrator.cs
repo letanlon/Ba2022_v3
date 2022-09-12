@@ -42,7 +42,9 @@ public class ModelCalibrator : MonoBehaviour
         //save position of calibrator:
         if(objManipulator.enabled==false)
         {
-            serverCommunicator.GetComponent<ServerCommunicator>().saveObjectModelPosition(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z,transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z, transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            //serverCommunicator.GetComponent<ServerCommunicator>().saveObjectModelPosition(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z,transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z, transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            serverCommunicator.GetComponent<ServerCommunicator>().saveObjectModelPosition(transform);
+
         }
     }
 
@@ -51,6 +53,15 @@ public class ModelCalibrator : MonoBehaviour
         Debug.Log("SetToSavedPosition: "+px+" "+py+" "+pz+" "+rx+" "+ry+" "+rz+" "+sz+" "+sy+" "+sz+" ");
         modelCalibrator.transform.localPosition = new Vector3(px,py,pz);
         modelCalibrator.transform.localEulerAngles = new Vector3(rx,ry,rz);
+        modelCalibrator.transform.localScale = new Vector3(sx,sy,sz);
+
+    }
+
+    public void setToSavedWorldPosition(float px, float py, float pz, float rx, float ry, float rz, float sx, float sy, float sz)
+    {
+        Debug.Log("SetToSavedPosition: "+px+" "+py+" "+pz+" "+rx+" "+ry+" "+rz+" "+sz+" "+sy+" "+sz+" ");
+        modelCalibrator.transform.position = new Vector3(px,py,pz);
+        modelCalibrator.transform.eulerAngles = new Vector3(rx,ry,rz);
         modelCalibrator.transform.localScale = new Vector3(sx,sy,sz);
 
     }
