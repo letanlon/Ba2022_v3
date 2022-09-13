@@ -14,12 +14,11 @@
         JSONNode objectModelNode;
         JSONNode ticketNode;
         [SerializeField] GameObject modelCalibrator = default;
-        [SerializeField] GameObject ModelHolder = default;
+        [SerializeField] GameObject modelHolder = default;
         [SerializeField] TextMeshPro dialogText = default;
         [SerializeField] TextMeshPro errorText = default;
-        private float progressHelp;
-
-
+        private float loadingProgress=0;
+        private Transform defaultPosition;
 
         [SerializeField] string[] url;
         [SerializeField] int addrressInUse;
@@ -39,6 +38,10 @@
             // StartCoroutine(PutWebData("http://localhost:3000/objectModels/005visemes"));
         }
 
+        void Start()
+        {
+            defaultPosition = modelHolder.transform;
+        }
         public void test()
         {
             string jsonstring = objectModelNode.ToString();
@@ -146,11 +149,10 @@
         // Platforms like UWP and WebGL don't call this method at this moment, since they don't use threads.
             private void OnProgress(AssetLoaderContext assetLoaderContext, float progress)
         {
-            progressHelp=progress;
+            loadingProgress = progress;
             string progressStatus = "Progress: "+progress;
             Debug.Log(progressStatus);
             dialogText.text= progressStatus;
-
         }
 
         // This event is called when there is any critical error loading your model.
@@ -164,6 +166,7 @@
 
         public void loadModel()//string modelname)
         {
+            loadingProgress=0;
             //in case that model was already loaded before
             destroyExistingModel();
                                             // request scanned model
@@ -187,11 +190,14 @@
 
             // Important: If you're downloading models from files that are not Zipped, you must pass the model extension as the last parameter from this call (Eg: "fbx")
             // Begins the model downloading.
-            AssetDownloader.LoadModelFromUri(webRequest, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions, null, "obj");    
+            AssetDownloader.LoadModelFromUri(webRequest, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions, null, "obj");
+
+            StartCoroutine(placeModelAR());
         }
+
         public void loadModelOnVr()//string modelname)
         {
-            progressHelp=0;
+            loadingProgress=0;
             destroyExistingModel();
             // if model already exist, destroy it first => call method again to update new position of model
 
@@ -215,12 +221,12 @@
             // Important: If you're downloading models from files that are not Zipped, you must pass the model extension as the last parameter from this call (Eg: "fbx")
             // Begins the model downloading.
             AssetDownloader.LoadModelFromUri(webRequest, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions, null, "obj");
-
+            StartCoroutine(placeModelVR());
         }
         
         public void updateModelWorldPosition()//string modelname)
         {
-            if(progressHelp>=1)
+            if(loadingProgress>=1)
             {
                 GameObject _gameObject;
                 _gameObject = GameObject.Find("1");
@@ -229,25 +235,41 @@
                 _gameObject.transform.position = new Vector3(objectModelNode["position"][9],objectModelNode["position"][10],objectModelNode["position"][11]);
                 _gameObject.transform.eulerAngles = new Vector3(objectModelNode["position"][12],objectModelNode["position"][13],objectModelNode["position"][14]);
             }
+
+        }
+
         
-        }
-            
-        public void attachModelasChild()
+        IEnumerator placeModelAR()
         {
+            Debug.Log("Waiting for LoadingProgress to finish");
+            yield return new WaitUntil(() => loadingProgress>=1);
+            Debug.Log("LoadingProgress>=100. placeModel");
 
-
+            //Increment and Load next scene
+            setModelHolderToTrackedPosition();
+        }
+        IEnumerator placeModelVR()
+        {
+            Debug.Log("Waiting for LoadingProgress to finish");
+            yield return new WaitUntil(() => loadingProgress>=1);
+            Debug.Log("LoadingProgress>=100. placeModel");
+            updateModelWorldPosition();
         }
 
+            
         public void setModelHolderToTrackedPosition(){
-            // ModelHolder.transform.position=pose.position;
-            // ModelHolder.transform.rotation=pose.rotation;
+            //reset all positions
+            //resetPosition(modelCalibrator);
+            //resetPosition(modelHolder);
+            //Debug("Resetted Positions");
+
+            // modelHolder.transform.position=pose.position;
+            // modelHolder.transform.rotation=pose.rotation;
             //Move ModelHolder to tracked position
             //Pose pose = GameObject.FindGameObjectWithTag("QrCode").GetComponent<SpatialGraphNodeTracker>().getPose();
 
             //AttachModelAsChild of Calibrator
-            GameObject _gameObject;
-            _gameObject = GameObject.Find("1");
-            _gameObject.transform.parent = modelCalibrator.transform;
+            attachModelAsChild();
 
             //set ModelHolder to QR Position
             Transform qrTransform = GameObject.FindGameObjectWithTag("QrCode").transform;
@@ -255,13 +277,19 @@
             Debug.Log("setModelHolderTo position: "+qrTransform.position.x+" "+qrTransform.position.y+" position: "+qrTransform.position);
             Debug.Log("setModelHolderTo rotation: "+qrTransform.rotation.x+" "+qrTransform.rotation.y);
 
-            ModelHolder.transform.position=qrTransform.position;
-            ModelHolder.transform.rotation=qrTransform.rotation;
+            modelHolder.transform.position=qrTransform.position;
+            modelHolder.transform.rotation=qrTransform.rotation;
 
             //set modelCalibrator to last saved position
             modelCalibrator.GetComponent<ModelCalibrator>().setToSavedPosition(objectModelNode["position"][0], objectModelNode["position"][1], objectModelNode["position"][2], objectModelNode["position"][3], objectModelNode["position"][4],objectModelNode["position"][5],objectModelNode["position"][6], objectModelNode["position"][7],objectModelNode["position"][8]);
     }
 
+    public void resetPosition(GameObject go)
+    {
+        go.transform.position=defaultPosition.position;
+        go.transform.rotation=defaultPosition.rotation;
+        go.transform.localScale=defaultPosition.localScale;
+    }
         private void OnLoad(AssetLoaderContext assetLoaderContext)
         {
             // The root loaded GameObject is assigned to the "assetLoaderContext.RootGameObject" field.
@@ -287,5 +315,19 @@
                 GameObject go = GameObject.Find("1");
                 Destroy(go, 1);
             }
+        }
+
+        void attachModelAsChild(){
+            //attach model to calibrator
+            GameObject model;
+            model = GameObject.Find("1");
+            //positions need to be the same first
+            model.transform.position=modelCalibrator.transform.position;
+            model.transform.rotation=modelCalibrator.transform.rotation;
+            //model.transform.eulerAngles=modelCalibrator.transform.eulerAngles;
+            model.transform.localScale=modelCalibrator.transform.localScale;
+
+            model.transform.parent = modelCalibrator.transform;
+
         }
     }

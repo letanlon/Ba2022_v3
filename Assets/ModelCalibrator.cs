@@ -8,11 +8,15 @@ public class ModelCalibrator : MonoBehaviour
     public ObjectManipulator objManipulator;
     [SerializeField] GameObject serverCommunicator;
     [SerializeField] GameObject modelCalibrator;
+    [SerializeField] bool modelVisibility;
+
+
     // Start is called before the first frame update
     void Start()
     {
         objManipulator = modelCalibrator.GetComponent<ObjectManipulator>();
         objManipulator.enabled = false;
+        modelVisibility = true;
     }
 
     // Update is called once per frame
@@ -63,6 +67,19 @@ public class ModelCalibrator : MonoBehaviour
         modelCalibrator.transform.position = new Vector3(px,py,pz);
         modelCalibrator.transform.eulerAngles = new Vector3(rx,ry,rz);
         modelCalibrator.transform.localScale = new Vector3(sx,sy,sz);
+    }
 
+    public void toggleVisibility(){
+        Debug.Log("toggledVisiblity");
+        if (GameObject.Find("1") != null)
+        {
+            //it exists
+            Debug.Log("it exists");
+            foreach (Transform child in GameObject.Find("1").transform) {
+            child.gameObject.GetComponent< Renderer >().enabled = !modelVisibility;
+            }
+            modelVisibility=!modelVisibility;
+        }
+        
     }
 }

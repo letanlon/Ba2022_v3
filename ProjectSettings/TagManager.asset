@@ -9,6 +9,8 @@ TagManager:
   - QrCode
   - ServerCommunicator
   - DialogText
+  - Cube
+  - ModelCalibrator
   layers:
   - Default
   - TransparentFX

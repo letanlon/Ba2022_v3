@@ -11,13 +11,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Scene Flicker Test.unity
     guid: 2e8f90e8cb57eba4c896206ce28c4a34
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/PUN testscene 2.unity
     guid: c343941921d4b454cb7aecdd914dd4ec
   - enabled: 0
     path: Assets/Scenes/restapitesting.unity
     guid: f41fdfd533655ba4e9edba2ecd30c7d7
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/dev Scenes/ModelCalibration.unity
     guid: 155f158e69684624bade54bba9496e06
   - enabled: 0
