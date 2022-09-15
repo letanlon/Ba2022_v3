@@ -11,6 +11,8 @@ TagManager:
   - DialogText
   - Cube
   - ModelCalibrator
+  - promptModeSelection
+  - dummybuttons
   layers:
   - Default
   - TransparentFX
