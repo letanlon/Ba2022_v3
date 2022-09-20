@@ -50,6 +50,8 @@ namespace QRTracking
         private QRCodeWatcherAccessStatus accessStatus;
         private System.Threading.Tasks.Task<QRCodeWatcherAccessStatus> capabilityTask;
 
+
+
         public System.Guid GetIdForQRCode(string qrCodeData)
         {
             lock (qrCodesList)
@@ -80,6 +82,7 @@ namespace QRTracking
         // Use this for initialization
         async protected virtual void Start()
         {
+            //loadingModelDialog.SetActive(false);
             IsSupported = QRCodeWatcher.IsSupported();
             capabilityTask = QRCodeWatcher.RequestAccessAsync();
             accessStatus = await capabilityTask;
@@ -123,10 +126,22 @@ namespace QRTracking
                     Debug.Log("QRCodesManager starting QRCodeWatcher Exception:" + ex.ToString());
                 }
             }
+  
         }
 
         public void StopQRTracking()
         {
+            //Cleaning qr codes
+            if (GameObject.FindGameObjectWithTag("QrCode") != null)
+            {
+                Debug.Log("QRCode exists");
+                //GameObject[] qrcodes = GameObject.FindGameObjectsWithTag("QrCode");
+                //foreach(GameObject qrcode in qrcodes)
+                GameObject qrcode = GameObject.FindGameObjectWithTag("QrCode");
+                Destroy(qrcode, 1);
+                Debug.Log("QRCode destroyed");
+            }
+            
             if (IsTrackerRunning)
             {
                 IsTrackerRunning = false;

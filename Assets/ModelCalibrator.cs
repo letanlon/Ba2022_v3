@@ -9,6 +9,9 @@ public class ModelCalibrator : MonoBehaviour
     [SerializeField] GameObject serverCommunicator;
     [SerializeField] GameObject modelCalibrator;
     [SerializeField] bool modelVisibility;
+    [SerializeField] GameObject buttonDialogSavePosition;
+
+    MenuHandler menuHandler;
 
 
     // Start is called before the first frame update
@@ -17,6 +20,8 @@ public class ModelCalibrator : MonoBehaviour
         objManipulator = modelCalibrator.GetComponent<ObjectManipulator>();
         objManipulator.enabled = false;
         modelVisibility = true;
+
+        menuHandler = GameObject.Find("UI_Handler").GetComponent<MenuHandler>();
     }
 
     // Update is called once per frame
@@ -28,7 +33,6 @@ public class ModelCalibrator : MonoBehaviour
     public void toggleCalibrationMode()
     {
         objManipulator.enabled = !objManipulator.enabled;
-
         /* this is to send position of model to server, but we want to save the position of the calibrator
          GameObject go;
         go = GameObject.Find("1");
@@ -48,7 +52,16 @@ public class ModelCalibrator : MonoBehaviour
         {
             //serverCommunicator.GetComponent<ServerCommunicator>().saveObjectModelPosition(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z,transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z, transform.localScale.x, transform.localScale.y, transform.localScale.z);
             serverCommunicator.GetComponent<ServerCommunicator>().saveObjectModelPosition(transform);
-
+            menuHandler.setDialogDescription("Saved new position.");
+            menuHandler.setDialogTitle("Calibrating Mode (OFF)");
+            buttonDialogSavePosition.SetActive(false);
+        }
+        else
+        {
+            string description = "Use your hands to set the model to the desired position"+"\n"+"Repress 'Model Calibration' to save the new model position.";
+            menuHandler.setDialogDescription(description);
+            menuHandler.setDialogTitle("Calibrating Mode (ON)");
+            buttonDialogSavePosition.SetActive(true);
         }
     }
 

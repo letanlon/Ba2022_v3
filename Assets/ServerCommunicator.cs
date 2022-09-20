@@ -17,6 +17,7 @@
         [SerializeField] GameObject modelHolder = default;
         [SerializeField] TextMeshPro dialogText = default;
         [SerializeField] TextMeshPro errorText = default;
+        MenuHandler menuHandler;
         private float loadingProgress=0;
         private Transform defaultPosition;
 
@@ -40,6 +41,7 @@
 
         void Start()
         {
+            menuHandler = GameObject.Find("UI_Handler").GetComponent<MenuHandler>();
             defaultPosition = modelHolder.transform;
         }
         public void test()
@@ -150,9 +152,17 @@
             private void OnProgress(AssetLoaderContext assetLoaderContext, float progress)
         {
             loadingProgress = progress;
-            string progressStatus = "Progress: "+progress;
+            string progressStatus = "Loading progress: "+progress;
             Debug.Log(progressStatus);
-            dialogText.text= progressStatus;
+            menuHandler.setDialogDescription(progressStatus);
+
+            if(progress==1.0f)
+            {
+                Debug.Log("LoadingDone");
+                menuHandler.setDialogDescription("Loading done.");
+                menuHandler.setDialogTitle("Dialog");
+                menuHandler.deactivateUIElement("ButtonDialogLoadModel");
+            }
         }
 
         // This event is called when there is any critical error loading your model.
@@ -161,11 +171,14 @@
         {
             string errorStatus = "error: "+contextualizedError;
             Debug.Log(errorStatus);
-            dialogText.text= errorStatus;
+            menuHandler.setDialogDescription("Error: "+errorStatus);
         }
 
         public void loadModel()//string modelname)
         {
+            //Destroy Load Button
+            menuHandler.deactivateUIElement("ButtonDialogLoadModel");
+
             loadingProgress=0;
             //in case that model was already loaded before
             destroyExistingModel();
@@ -282,7 +295,11 @@
 
             //set modelCalibrator to last saved position
             modelCalibrator.GetComponent<ModelCalibrator>().setToSavedPosition(objectModelNode["position"][0], objectModelNode["position"][1], objectModelNode["position"][2], objectModelNode["position"][3], objectModelNode["position"][4],objectModelNode["position"][5],objectModelNode["position"][6], objectModelNode["position"][7],objectModelNode["position"][8]);
-    }
+
+            //stop qr scanning
+            QRCodesManager qrManager = GameObject.Find("QRCodesManager").GetComponent<QRCodesManager>();
+            qrManager.StopQRTracking();
+        }
 
     public void resetPosition(GameObject go)
     {

@@ -8,6 +8,7 @@ public class CreateWorld : MonoBehaviour
     [SerializeField] bool isHPReverb;
 
     [SerializeField] GameObject environmentPrefab =default;
+    bool environmentActive;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +20,7 @@ public class CreateWorld : MonoBehaviour
         if (isHPReverb)
         {
             Instantiate(environmentPrefab);
+            environmentActive = true;
         }
     }
 
@@ -27,5 +29,20 @@ public class CreateWorld : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void toggleWorld()
+    {
+        environmentActive = !environmentActive;
+
+        if(environmentActive)
+        {
+            Instantiate(environmentPrefab);
+        }
+        else
+        {
+            GameObject go = GameObject.FindGameObjectWithTag("World");
+            Destroy(go, 1);
+        }
     }
 }
