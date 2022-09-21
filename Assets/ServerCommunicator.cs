@@ -278,9 +278,9 @@
                 GameObject go = GameObject.Find("1");
                 go.AddComponent<MeshCollider>();
                 go.GetComponent<MeshCollider>().convex=true;
-                go.AddComponent(typeof(Microsoft.MixedReality.Toolkit.UI.ObjectManipulator));
-                go.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>().enabled=false;
-                go.AddComponent(typeof(Microsoft.MixedReality.Toolkit.Input.NearInteractionGrabbable));
+                //go.AddComponent(typeof(Microsoft.MixedReality.Toolkit.UI.ObjectManipulator));
+                //go.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>().enabled=false;
+                //go.AddComponent(typeof(Microsoft.MixedReality.Toolkit.Input.NearInteractionGrabbable));
             }
         }
             

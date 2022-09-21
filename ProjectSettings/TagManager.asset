@@ -17,6 +17,8 @@ TagManager:
   - LoadingModelDialogDescription
   - LoadingModelDialogLoadButton
   - DialogTitle
+  - Pointer
+  - Laserpointer
   layers:
   - Default
   - TransparentFX

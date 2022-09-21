@@ -68,7 +68,7 @@ public class MenuHandler : MonoBehaviour
             //is AR user
             // AR user can be either onsite oder remote-user
             Debug.Log("Select user mode");
-            dialogDescription.text="HoloLens dected. Please choose your desired user-mode.";
+            dialogDescription.text="HoloLens detected. Please choose your desired user-mode.";
         }
     }
 

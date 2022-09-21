@@ -12,6 +12,8 @@ namespace MRTK.Tutorials.MultiUserCapabilities
         [SerializeField] private GameObject roverExplorerPrefab = default;
         [SerializeField] private Transform roverExplorerLocation = default;
         [SerializeField] private GameObject arrow = default;
+        [SerializeField] private GameObject syncPointer = default;
+
 
 
         // private PhotonView pv;
@@ -69,6 +71,9 @@ namespace MRTK.Tutorials.MultiUserCapabilities
                 if (roverExplorerPrefab != null) pool.ResourceCache.Add(roverExplorerPrefab.name, roverExplorerPrefab);
                 
                 if (arrow != null) pool.ResourceCache.Add(arrow.name, arrow);
+
+                if (syncPointer != null) pool.ResourceCache.Add(syncPointer.name, syncPointer);
+
             }
         }
 
@@ -108,7 +113,7 @@ namespace MRTK.Tutorials.MultiUserCapabilities
                 roverExplorerLocation.rotation);
         }
 
-        public void instantiateArrow()
+        public void createArrow()
         {
             Transform cameraTransform = GameObject.Find("Main Camera").transform;
 
@@ -116,18 +121,11 @@ namespace MRTK.Tutorials.MultiUserCapabilities
                 cameraTransform.rotation);
         }
 
-        // private void CreateMainLunarModule()
-        // {
-        //     module = PhotonNetwork.Instantiate(roverExplorerPrefab.name, Vector3.zero, Quaternion.identity);
-        //     pv.RPC("Rpc_SetModuleParent", RpcTarget.AllBuffered);
-        // }
-        //
-        // [PunRPC]
-        // private void Rpc_SetModuleParent()
-        // {
-        //     Debug.Log("Rpc_SetModuleParent- RPC Called");
-        //     module.transform.parent = TableAnchor.Instance.transform;
-        //     module.transform.localPosition = moduleLocation;
-        // }
+        public void createSyncPointer()
+        {
+            Debug.Log("Creating SyncPointer");
+            var pointer = PhotonNetwork.Instantiate(syncPointer.name, Vector3.zero, Quaternion.identity);
+        }
+    
     }
 }

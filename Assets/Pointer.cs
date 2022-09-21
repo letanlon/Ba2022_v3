@@ -6,11 +6,16 @@ using Microsoft.MixedReality.Toolkit.Input;
 
 public class Pointer : MonoBehaviour
 {
-    public float m_DefaultLength = 5.0f;
-    public GameObject m_Dot;
+    public float defaultLength = 8.0f;
+    public GameObject pointer;
     [SerializeField] MixedRealityInputAction pointerAction = MixedRealityInputAction.None;
 
-    private LineRenderer m_LindeRenderer = null;
+    private LineRenderer lineRenderer = default;
+
+    void Awake()
+    {
+        lineRenderer=GetComponent<LineRenderer>();
+    }
     void Start()
     {
         
@@ -25,7 +30,7 @@ public class Pointer : MonoBehaviour
     private void UpdateLine()
     {
         //Use default or distance
-        float targetLength = m_DefaultLength;
+        float targetLength = defaultLength;
 
         //Raycast
         RaycastHit hit = CreateRaycast(targetLength);
@@ -39,10 +44,10 @@ public class Pointer : MonoBehaviour
             endPosition = hit.point;
         }
         // Set position of the dot
-        m_Dot.transform.transform.position = endPosition;
+        pointer.transform.position = endPosition;
         // Set linerenderer
-        m_LindeRenderer.SetPosition(0, transform.position);
-        m_LindeRenderer.SetPosition(1, endPosition);
+        lineRenderer.SetPosition(0, transform.position);
+        lineRenderer.SetPosition(1, endPosition);
     }
 
     public void OnActionEnded(BaseInputEventData eventData)
@@ -68,7 +73,7 @@ public class Pointer : MonoBehaviour
     {
         RaycastHit hit;
         Ray ray = new Ray(transform.position, transform.forward);
-        Physics.Raycast(ray, out hit, m_DefaultLength);
+        Physics.Raycast(ray, out hit, defaultLength);
 
         return hit;
     }

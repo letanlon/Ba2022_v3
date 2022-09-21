@@ -5,6 +5,10 @@ using UnityEngine;
 public class MarkerHandler : MonoBehaviour
 {
     [SerializeField] GameObject cube;
+    [SerializeField] GameObject laserpointer;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,5 +25,9 @@ public class MarkerHandler : MonoBehaviour
     {
         GameObject spawn = Instantiate(cube);
         spawn.transform.position= new Vector3 (0.5f,0.1f,0.5f);
+    }
+
+    public void toggleLaserPointer()
+    {
     }
 }
