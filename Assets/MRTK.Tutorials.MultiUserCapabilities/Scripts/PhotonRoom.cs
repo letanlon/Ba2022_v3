@@ -11,6 +11,8 @@ namespace MRTK.Tutorials.MultiUserCapabilities
         [SerializeField] private GameObject photonUserPrefab = default;
         [SerializeField] private GameObject roverExplorerPrefab = default;
         [SerializeField] private Transform roverExplorerLocation = default;
+        [SerializeField] private GameObject arrow = default;
+
 
         // private PhotonView pv;
         private Player[] photonPlayers;
@@ -65,6 +67,8 @@ namespace MRTK.Tutorials.MultiUserCapabilities
                 if (photonUserPrefab != null) pool.ResourceCache.Add(photonUserPrefab.name, photonUserPrefab);
 
                 if (roverExplorerPrefab != null) pool.ResourceCache.Add(roverExplorerPrefab.name, roverExplorerPrefab);
+                
+                if (arrow != null) pool.ResourceCache.Add(arrow.name, arrow);
             }
         }
 
@@ -102,6 +106,14 @@ namespace MRTK.Tutorials.MultiUserCapabilities
 
             var go = PhotonNetwork.Instantiate(roverExplorerPrefab.name, positionOnTopOfSurface,
                 roverExplorerLocation.rotation);
+        }
+
+        public void instantiateArrow()
+        {
+            Transform cameraTransform = GameObject.Find("Main Camera").transform;
+
+            var go = PhotonNetwork.Instantiate(arrow.name, cameraTransform.position + cameraTransform.forward*0.37f,
+                cameraTransform.rotation);
         }
 
         // private void CreateMainLunarModule()
