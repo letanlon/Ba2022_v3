@@ -260,6 +260,7 @@
 
             //Increment and Load next scene
             setModelHolderToTrackedPosition();
+            attachComponents();
         }
         IEnumerator placeModelVR()
         {
@@ -267,8 +268,21 @@
             yield return new WaitUntil(() => loadingProgress>=1);
             Debug.Log("LoadingProgress>=100. placeModel");
             updateModelWorldPosition();
+            attachComponents();
         }
 
+        private void attachComponents()
+        {
+            if (GameObject.Find("1") != null)
+            {
+                GameObject go = GameObject.Find("1");
+                go.AddComponent<MeshCollider>();
+                go.GetComponent<MeshCollider>().convex=true;
+                go.AddComponent(typeof(Microsoft.MixedReality.Toolkit.UI.ObjectManipulator));
+                go.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>().enabled=false;
+                go.AddComponent(typeof(Microsoft.MixedReality.Toolkit.Input.NearInteractionGrabbable));
+            }
+        }
             
         public void setModelHolderToTrackedPosition(){
             //reset all positions
