@@ -8,13 +8,14 @@ public class MarkerManager : MonoBehaviour
 {
    [SerializeField] GameObject cube;
     [SerializeField] GameObject laserpointer;
+    private PhotonRoom photonRoom;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        photonRoom=GameObject.Find("NetworkRoom").GetComponent<PhotonRoom>();
     }
 
     // Update is called once per frame
@@ -43,5 +44,15 @@ public class MarkerManager : MonoBehaviour
             PhotonRoom photonRoom =  GameObject.Find("NetworkRoom").GetComponent<PhotonRoom>();
             photonRoom.createSyncPointer();
         }
+    }
+
+    public void spawnArrow()
+    {
+        photonRoom.createArrow();
+    }
+
+        public void spawnMarker()
+    {
+        photonRoom.createMarker();
     }
 }

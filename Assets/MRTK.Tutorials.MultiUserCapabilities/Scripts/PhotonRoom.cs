@@ -9,10 +9,10 @@ namespace MRTK.Tutorials.MultiUserCapabilities
         public static PhotonRoom Room;
 
         [SerializeField] private GameObject photonUserPrefab = default;
-        [SerializeField] private GameObject roverExplorerPrefab = default;
-        [SerializeField] private Transform roverExplorerLocation = default;
         [SerializeField] private GameObject arrow = default;
         [SerializeField] private GameObject syncPointer = default;
+        [SerializeField] private GameObject marker = default;
+
 
 
 
@@ -67,12 +67,12 @@ namespace MRTK.Tutorials.MultiUserCapabilities
             if (PhotonNetwork.PrefabPool is DefaultPool pool)
             {
                 if (photonUserPrefab != null) pool.ResourceCache.Add(photonUserPrefab.name, photonUserPrefab);
-
-                if (roverExplorerPrefab != null) pool.ResourceCache.Add(roverExplorerPrefab.name, roverExplorerPrefab);
                 
                 if (arrow != null) pool.ResourceCache.Add(arrow.name, arrow);
 
                 if (syncPointer != null) pool.ResourceCache.Add(syncPointer.name, syncPointer);
+
+                if (marker != null) pool.ResourceCache.Add(marker.name, marker);
 
             }
         }
@@ -105,12 +105,9 @@ namespace MRTK.Tutorials.MultiUserCapabilities
 
         private void CreateInteractableObjects()
         {
-            var position = roverExplorerLocation.position;
-            var positionOnTopOfSurface = new Vector3(position.x, position.y + roverExplorerLocation.localScale.y / 2,
-                position.z);
+            // ar user load model here
 
-            var go = PhotonNetwork.Instantiate(roverExplorerPrefab.name, positionOnTopOfSurface,
-                roverExplorerLocation.rotation);
+            //var go = PhotonNetwork.Instantiate(model.name, position, rotation);
         }
 
         public void createArrow()
@@ -126,6 +123,14 @@ namespace MRTK.Tutorials.MultiUserCapabilities
             Debug.Log("Creating SyncPointer");
             var pointer = PhotonNetwork.Instantiate(syncPointer.name, Vector3.zero, Quaternion.identity);
         }
-    
+
+        public void createMarker()
+        {
+            Transform cameraTransform = GameObject.Find("Main Camera").transform;
+
+            var go = PhotonNetwork.Instantiate(marker.name, cameraTransform.position + cameraTransform.forward*0.37f,
+            cameraTransform.rotation);
+        }
+
     }
 }

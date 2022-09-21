@@ -7,6 +7,8 @@ public class MenuHandler : MonoBehaviour
 {
     [SerializeField] GameObject remoteHandmenu;
     [SerializeField] GameObject onsiteHandmenu;
+    [SerializeField] GameObject markerMenu;
+
     [SerializeField] bool isRemote;
     [SerializeField] GameObject dialog;
     [SerializeField] TextMeshPro dialogTitle;
@@ -27,6 +29,7 @@ public class MenuHandler : MonoBehaviour
     {   
         buttonDialogRemote = GameObject.Find("ButtonDialogRemote");
         buttonDialogOnsite = GameObject.Find("ButtonDialogOnsite");
+
         buttonDialogSavePosition = GameObject.Find("ButtonDialogSavePosition");
         buttonDialogLoadModel = GameObject.Find("ButtonDialogLoadModel");
 
@@ -39,7 +42,7 @@ public class MenuHandler : MonoBehaviour
         //turn off menu by default
         remoteHandmenu.SetActive(false);
         onsiteHandmenu.SetActive(false);
-        
+        markerMenu.SetActive(false);
 
 
         // findDialog
@@ -164,5 +167,11 @@ public class MenuHandler : MonoBehaviour
         Debug.Log("scanSuccess = false");
         scanSuccess=false;
         //update() starts looking for detected QR-Codes
+    }
+
+    public void toggleMarkerMenu()
+    {
+        markerMenu.SetActive(true);
+        markerMenu.SetActive(markerMenu.active);
     }
 }

@@ -19,6 +19,7 @@ TagManager:
   - DialogTitle
   - Pointer
   - Laserpointer
+  - MarkerMenu
   layers:
   - Default
   - TransparentFX
