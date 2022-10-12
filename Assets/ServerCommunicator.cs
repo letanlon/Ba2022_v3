@@ -17,21 +17,23 @@
         [SerializeField] GameObject modelHolder = default;
         [SerializeField] TextMeshPro dialogText = default;
         [SerializeField] TextMeshPro errorText = default;
+        [SerializeField] string modelNameToLoad = default;
+
         MenuHandler menuHandler;
         private float loadingProgress=0;
         private Transform defaultPosition;
 
         [SerializeField] string[] url;
-        [SerializeField] int addrressInUse;
+        [SerializeField] int addressInUse;
         // Start is called before the first frame update
         void Awake()
         {
-            addrressInUse=0;
+            addressInUse=0;
             // Make a web request to get info from the server
             // this will be a text response.
             // This will return/continue IMMEDIATELY, but the coroutine
             // will take several MS to actually get a response from the server.
-            makeGetRequest("/objectModels/", "nordservoold");
+            // makeGetRequest("/objectModels/", "nordservoold");
 
 
             
@@ -46,8 +48,7 @@
         }
         public void test()
         {
-            string jsonstring = objectModelNode.ToString();
-            makePutRequest("/objectModels/", "nordservoold", jsonstring);
+
         }
 
         public void makeGetRequest(string address, string slug){
@@ -60,7 +61,7 @@
 
         IEnumerator GetWebData( string address, string slug )
         {
-            string fullAddress=url[addrressInUse]+address+slug;
+            string fullAddress=url[addressInUse]+address+slug;
             Debug.Log("GetRequest "+fullAddress);
             UnityWebRequest www = UnityWebRequest.Get(fullAddress);
             yield return www.SendWebRequest();
@@ -72,7 +73,7 @@
             else
             {
                 Debug.Log("GET response: "+ www.downloadHandler.text );
-                ProcessServerResponse(url[addrressInUse]+address, www.downloadHandler.text);
+                ProcessServerResponse(url[addressInUse]+address, www.downloadHandler.text);
                 //putrequest
                 //StartCoroutine(PutWebData("http://localhost:3000/objectModels/005visemes", www.downloadHandler.text));
             }
@@ -80,7 +81,7 @@
 
         IEnumerator PutWebData( string address, string slug, string json)
         {
-            string fullAddress=url[addrressInUse]+address+slug;
+            string fullAddress=url[addressInUse]+address+slug;
             Debug.Log("PutRequest "+fullAddress);
             UnityWebRequest www = UnityWebRequest.Put(fullAddress, json);
             www.SetRequestHeader("Content-Type", "application/json");
@@ -102,12 +103,12 @@
 
         void ProcessServerResponse( string address, string rawResponse )
         {
-            if(address==url[addrressInUse]+"/objectModels/")
+            if(address==url[addressInUse]+"/objectModels/")
             {
                 objectModelNode = JSON.Parse(rawResponse);
                 Debug.Log(objectModelNode[1]);
             }
-            else if (address==url[addrressInUse]+"/tickets/")
+            else if (address==url[addressInUse]+"/tickets/")
             {
                 ticketNode = JSON.Parse(rawResponse);
             }
@@ -117,31 +118,33 @@
         public void saveObjectModelPosition(Transform trans){
 
             //save local position of calibrated model / saving relative position to QR Code
-            objectModelNode["position"][0]=trans.localPosition.x;
-            objectModelNode["position"][1]=trans.localPosition.y;
-            objectModelNode["position"][2]=trans.localPosition.z;
+            objectModelNode["position"]["positionX"]=trans.localPosition.x;
+            objectModelNode["position"]["positionY"]=trans.localPosition.y;
+            objectModelNode["position"]["positionZ"]=trans.localPosition.z;
 
-            objectModelNode["position"][3]=trans.localEulerAngles.x;
-            objectModelNode["position"][4]=trans.localEulerAngles.y;
-            objectModelNode["position"][5]=trans.localEulerAngles.z;
+            objectModelNode["position"]["rotationX"]=trans.localEulerAngles.x;
+            objectModelNode["position"]["rotationY"]=trans.localEulerAngles.y;
+            objectModelNode["position"]["rotationZ"]=trans.localEulerAngles.z;
 
-            objectModelNode["position"][6]=trans.localScale.x;
-            objectModelNode["position"][7]=trans.localScale.y;
-            objectModelNode["position"][8]=trans.localScale.z;
+            objectModelNode["position"]["scaleX"]=trans.localScale.x;
+            objectModelNode["position"]["scaleY"]=trans.localScale.y;
+            objectModelNode["position"]["scaleZ"]=trans.localScale.z;
 
             //saving position in world, localScale and worldScale are identical
-            objectModelNode["position"][9]=trans.position.x;
-            objectModelNode["position"][10]=trans.position.y;
-            objectModelNode["position"][11]=trans.position.z;
+            objectModelNode["position"]["world_positionX"]=trans.position.x;
+            objectModelNode["position"]["world_positionY"]=trans.position.y;
+            objectModelNode["position"]["world_positionZ"]=trans.position.z;
 
-            objectModelNode["position"][12]=trans.eulerAngles.x;
-            objectModelNode["position"][13]=trans.eulerAngles.y;
-            objectModelNode["position"][14]=trans.eulerAngles.z;
+            objectModelNode["position"]["world_rotationX"]=trans.eulerAngles.x;
+            objectModelNode["position"]["world_rotationY"]=trans.eulerAngles.y;
+            objectModelNode["position"]["world_rotationZ"]=trans.eulerAngles.z;
 
 
             //update not necessary, as data will be written to database when finish application properly
             //but saving now better, in case app crashs or user doesnt properly exit app
             string jsonstring = objectModelNode.ToString();
+            Debug.Log(trans.localPosition.y);
+            Debug.Log("jsonstring string: "+jsonstring);
             makePutRequest("/objectModels/", objectModelNode["slug"], jsonstring);
         }
 
@@ -176,33 +179,28 @@
 
         public void loadModel()//string modelname)
         {
+            //in case that model was already loaded before
+            destroyExistingModel();
             //Destroy Load Button
             menuHandler.deactivateUIElement("ButtonDialogLoadModel");
 
             loadingProgress=0;
-            //in case that model was already loaded before
-            destroyExistingModel();
-                                            // request scanned model
+
+
+            // request scanned model
             string qrCodeText = GameObject.FindGameObjectWithTag("QrCode").GetComponent<QRCode>().CodeText;
-            ServerCommunicator serverCommunicator =  GameObject.FindGameObjectWithTag("ServerCommunicator").GetComponent<ServerCommunicator>();
-            serverCommunicator.makeGetRequest("/objectModels/", qrCodeText);
-            QRCodesManager qrCoderManager;
-            qrCoderManager = GameObject.Find("QRCodesManager").GetComponent<QRCodesManager>();
+            //ServerCommunicator serverCommunicator =  GameObject.FindGameObjectWithTag("ServerCommunicator").GetComponent<ServerCommunicator>();
+            makeGetRequest("/objectModels/", qrCodeText);
+            //QRCodesManager qrCoderManager;
+            //qrCoderManager = GameObject.Find("QRCodesManager").GetComponent<QRCodesManager>();
             //qrCoderManager.clearQrCodeList();
 
 
-            // Creates an AssetLoaderOptions instance.
-            // AssetLoaderOptions is a class used to configure many aspects of the loading process.
-            // We won't change the default settings this time, so we can use the instance as it is.
             var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-
-            // Creates the web-request.
-            // The web-request contains information on how to download the model.
-            // Let's download a model from the TriLib website.
-            var webRequest = AssetDownloader.CreateWebRequest("http://192.168.1.201:3000/objectModels/file/"+qrCodeText);
+            var webRequest = AssetDownloader.CreateWebRequest(url[addressInUse]+"/objectModels/file/"+qrCodeText);
 
             // Important: If you're downloading models from files that are not Zipped, you must pass the model extension as the last parameter from this call (Eg: "fbx")
-            // Begins the model downloading.
+            // Begins the model downloading
             AssetDownloader.LoadModelFromUri(webRequest, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions, null, "obj");
 
             StartCoroutine(placeModelAR());
@@ -214,21 +212,13 @@
             destroyExistingModel();
             // if model already exist, destroy it first => call method again to update new position of model
 
-            string modelName = "nordservoold";
             //update json data of model
-            makeGetRequest("/objectModels/", modelName);
+            //makeGetRequest("/objectModels/", modelNameToLoad);
 
-            // Creates an AssetLoaderOptions instance.
-            // AssetLoaderOptions is a class used to configure many aspects of the loading process.
-            // We won't change the default settings this time, so we can use the instance as it is.
             var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-
-            // Creates the web-request.
-            // The web-request contains information on how to download the model.
-            // Let's download a model from the TriLib website.
-            var webRequest = AssetDownloader.CreateWebRequest("http://192.168.1.201:3000/objectModels/file/"+modelName);
+            var webRequest = AssetDownloader.CreateWebRequest(url[addressInUse]+"/objectModels/file/"+modelNameToLoad);
             //updating json model in case a different user recalibrated model in the meantime
-            makeGetRequest("/objectModels/", modelName);
+            makeGetRequest("/objectModels/", modelNameToLoad);
 
 
             // Important: If you're downloading models from files that are not Zipped, you must pass the model extension as the last parameter from this call (Eg: "fbx")
@@ -258,8 +248,14 @@
             yield return new WaitUntil(() => loadingProgress>=1);
             Debug.Log("LoadingProgress>=100. placeModel");
 
-            //Increment and Load next scene
             setModelHolderToTrackedPosition();
+
+            if (GameObject.Find("ModelCalibrator") != null)
+            {
+                GameObject go = GameObject.Find("ModelCalibrator");
+                saveObjectModelPosition(go.transform);
+            }
+
             attachComponents();
         }
         IEnumerator placeModelVR()
@@ -275,7 +271,7 @@
         {
             if (GameObject.Find("1") != null)
             {
-                GameObject go = GameObject.Find("1");
+                GameObject go = GameObject.Find("1").transform.GetChild(0).gameObject;
                 go.AddComponent<MeshCollider>();
                 go.GetComponent<MeshCollider>().convex=true;
                 //go.AddComponent(typeof(Microsoft.MixedReality.Toolkit.UI.ObjectManipulator));
@@ -309,6 +305,8 @@
 
             //set modelCalibrator to last saved position
             modelCalibrator.GetComponent<ModelCalibrator>().setToSavedPosition(objectModelNode["position"][0], objectModelNode["position"][1], objectModelNode["position"][2], objectModelNode["position"][3], objectModelNode["position"][4],objectModelNode["position"][5],objectModelNode["position"][6], objectModelNode["position"][7],objectModelNode["position"][8]);
+
+            //update position for database
 
             //stop qr scanning
             QRCodesManager qrManager = GameObject.Find("QRCodesManager").GetComponent<QRCodesManager>();
@@ -344,7 +342,7 @@
             if (GameObject.Find("1") != null)
             {
                 GameObject go = GameObject.Find("1");
-                Destroy(go, 1);
+                Destroy(go);
             }
         }
 

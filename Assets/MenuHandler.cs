@@ -53,8 +53,8 @@ public class MenuHandler : MonoBehaviour
 
         //automaticly set vr users as remote users, because vr users are always remote
         //Hololens can be remote/onsite, everything else is always VR and VR is always remote
-        if(SystemInfo.deviceModel.Contains("HoloLens")) //for testing ar in editor
-        //if(!SystemInfo.deviceModel.Contains("HoloLens"))
+        //if(SystemInfo.deviceModel.Contains("HoloLens")) //for testing ar in editor
+        if(!SystemInfo.deviceModel.Contains("HoloLens"))
         {
             Debug.Log("Using remote user mode");
            //isRemote; clear dialog and destroy buttons

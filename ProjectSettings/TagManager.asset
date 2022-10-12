@@ -20,6 +20,7 @@ TagManager:
   - Pointer
   - Laserpointer
   - MarkerMenu
+  - SyncPointer
   layers:
   - Default
   - TransparentFX

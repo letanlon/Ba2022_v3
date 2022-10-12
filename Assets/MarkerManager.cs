@@ -43,6 +43,14 @@ public class MarkerManager : MonoBehaviour
             laserpointer.transform.position=camera.transform.position+camera.transform.forward*0.5f;
             PhotonRoom photonRoom =  GameObject.Find("NetworkRoom").GetComponent<PhotonRoom>();
             photonRoom.createSyncPointer();
+
+            /*
+            if(GameObject.FindGameObjectWithTag("SyncPointer")!=null)
+                {
+                    GameObject syncPointer = GameObject.FindGameObjectWithTag("SyncPointer");
+                    syncPointer.transform.parent=GameObject.FindGameObjectWithTag("Pointer").transform;
+                }
+                */
         }
     }
 

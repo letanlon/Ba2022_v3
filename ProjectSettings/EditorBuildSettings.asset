@@ -24,7 +24,7 @@ EditorBuildSettings:
     path: Assets/Scenes/dev Scenes/ModelCalibrationTest.unity
     guid: a13637a738a194f439f708957ca163e4
   - enabled: 1
-    path: Assets/Scenes/PUN testscene test multi object.unity
+    path: Assets/Scenes/Final Scene.unity
     guid: 079db98d82c133b4bb6f994f2bbc380c
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: d7fedfed58708e144a2d77c04c97a341, type: 2}
