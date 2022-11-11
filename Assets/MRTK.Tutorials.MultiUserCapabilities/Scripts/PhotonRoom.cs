@@ -12,6 +12,7 @@ namespace MRTK.Tutorials.MultiUserCapabilities
         [SerializeField] private GameObject arrow = default;
         [SerializeField] private GameObject syncPointer = default;
         [SerializeField] private GameObject marker = default;
+        [SerializeField] private GameObject marker2 = default;
 
 
 
@@ -74,6 +75,9 @@ namespace MRTK.Tutorials.MultiUserCapabilities
 
                 if (marker != null) pool.ResourceCache.Add(marker.name, marker);
 
+                if (marker2 != null) pool.ResourceCache.Add(marker2.name, marker2);
+
+
             }
         }
 
@@ -132,5 +136,12 @@ namespace MRTK.Tutorials.MultiUserCapabilities
             cameraTransform.rotation);
         }
 
+                public void createMarkerTest()
+        {
+            Transform cameraTransform = GameObject.Find("Main Camera").transform;
+
+            var go = PhotonNetwork.Instantiate(marker2.name, cameraTransform.position + cameraTransform.forward*0.37f,
+            cameraTransform.rotation);
+        }
     }
 }
