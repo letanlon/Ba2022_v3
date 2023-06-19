@@ -1,5 +1,5 @@
 # Mixed Reality Remote Maintenance
-This is a small project I worked on for 2 months as part of my bachelor thesis. It's a prototype to demonstrate the fundamental idea of MR Remote-Maintenance. This app is one part of the developed system, which also consists of a server and a web-frontend to manage the 3d-models. This is made for devices of the Windows Mixed Reality Plattform and was succesfully tested on HoloLens 2 and HP Reverb G2.
+This is a project I worked on for 3 months as part of my bachelor's thesis. It's a prototype to demonstrate the fundamental idea of MR Remote-Maintenance. This app is one part of the developed system, which also consists of a server and a web frontend to manage the 3D models. This is made for devices of the Windows Mixed Reality Plattform and was successfully tested on HoloLens 2 and HP Reverb G2.
 
 ![image](https://user-images.githubusercontent.com/68448738/214749308-2c350809-81ed-4981-aa4c-856b00d2c15d.png).  ![image](https://user-images.githubusercontent.com/68448738/214749501-715d65a9-6040-45ab-b61b-5942b581475b.png)
 
